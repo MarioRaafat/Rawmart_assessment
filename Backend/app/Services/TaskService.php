@@ -17,9 +17,9 @@ class TaskService
         ]);
     }
 
-    public function findAll(User $user): Collection
+    public function findAll(User $user)
     {
-        return $user->tasks()->orderBy('created_at', 'desc')->get();
+        return $user->tasks()->orderBy('created_at', 'desc')->paginate(10);
     }
 
     public function findOne(User $user, int $taskId): ?Task

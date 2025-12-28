@@ -10,7 +10,7 @@ import {
 } from '@/types';
 
 // Configure your API base URL here
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
 
 class ApiService {
   private baseUrl: string;
@@ -60,7 +60,7 @@ class ApiService {
       method: 'POST',
       body: JSON.stringify(data),
     });
-    localStorage.setItem('auth_token', response.access_token);
+    localStorage.setItem('auth_token', response.token);
     return response;
   }
 
@@ -69,7 +69,7 @@ class ApiService {
       method: 'POST',
       body: JSON.stringify(data),
     });
-    localStorage.setItem('auth_token', response.access_token);
+    localStorage.setItem('auth_token', response.token);
     return response;
   }
 
@@ -81,30 +81,35 @@ class ApiService {
   }
 
   async getMe(): Promise<User> {
-    return this.request<User>('/auth/me');
+    const response = await this.request<{ user: User }>('/auth/me');
+    return response.user;
   }
 
   // Task endpoints
   async getTasks(page: number = 1): Promise<PaginatedResponse<Task>> {
-    return this.request<PaginatedResponse<Task>>(`/tasks?page=${page}`);
+    const response = await this.request<{ tasks: PaginatedResponse<Task> }>(`/tasks?page=${page}`);
+    return response.tasks;
   }
 
   async getTask(id: number): Promise<Task> {
-    return this.request<Task>(`/tasks/${id}`);
+    const response = await this.request<{ task: Task }>(`/tasks/${id}`);
+    return response.task;
   }
 
   async createTask(data: CreateTaskData): Promise<Task> {
-    return this.request<Task>('/tasks', {
+    const response = await this.request<{ task: Task }>('/tasks', {
       method: 'POST',
       body: JSON.stringify(data),
     });
+    return response.task;
   }
 
   async updateTask(id: number, data: UpdateTaskData): Promise<Task> {
-    return this.request<Task>(`/tasks/${id}`, {
+    const response = await this.request<{ task: Task }>(`/tasks/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
+    return response.task;
   }
 
   async deleteTask(id: number): Promise<void> {
