@@ -4,8 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
+    /**
+     * Indicates if the migration should run within a transaction.
+     * Disabled for PostgreSQL compatibility.
+     */
+    public $withinTransaction = false;
+
     /**
      * Run the migrations.
      */
