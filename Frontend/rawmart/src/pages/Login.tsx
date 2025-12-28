@@ -43,20 +43,20 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md animate-fade-in">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 sm:p-8">
+      <div className="w-full max-w-lg animate-fade-in space-y-8">
         <div className="flex items-center justify-center gap-2 mb-8">
           <CheckSquare className="h-10 w-10 text-primary" />
           <span className="text-3xl font-bold">TaskFlow</span>
         </div>
 
-        <Card>
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Welcome back</CardTitle>
-            <CardDescription>Sign in to your account to continue</CardDescription>
+        <Card className="border-muted shadow-lg">
+          <CardHeader className="text-center space-y-2 pb-6">
+            <CardTitle className="text-2xl font-bold tracking-tight">Welcome back</CardTitle>
+            <CardDescription className="text-base">Sign in to your account to continue</CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+          <CardContent className="p-6 pt-0">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {error && (
                 <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />

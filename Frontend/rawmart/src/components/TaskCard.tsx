@@ -69,11 +69,11 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   return (
     <>
-      <Card className="animate-fade-in hover:shadow-md transition-shadow">
-        <CardHeader className="pb-2">
+      <Card className="animate-fade-in group hover:shadow-lg hover:border-primary/20 transition-all duration-300">
+        <CardHeader className="p-6 pb-2 space-y-0">
           <div className="flex items-start justify-between gap-2">
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-foreground truncate">{task.title}</h3>
+            <div className="flex-1 min-w-0 pr-2">
+              <h3 className="font-semibold text-lg text-foreground truncate group-hover:text-primary transition-colors">{task.title}</h3>
               <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
                 <Clock className="h-3 w-3" />
                 <span>{format(new Date(task.created_at), 'MMM d, yyyy')}</span>
@@ -103,7 +103,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             </div>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6 pt-2">
           {task.description && (
             <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
               {task.description}

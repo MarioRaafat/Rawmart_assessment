@@ -111,10 +111,10 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container py-8">
+      <main className="w-full max-w-[1920px] mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold">My Tasks</h1>
+             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">My Tasks</h1>
             <p className="text-muted-foreground mt-1">
               Manage and organize your tasks
             </p>
@@ -125,8 +125,9 @@ const Dashboard = () => {
           </Button>
         </div>
 
-        <Tabs value={filter} onValueChange={(v) => setFilter(v as FilterStatus)} className="mb-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+        <Tabs value={filter} onValueChange={(v) => setFilter(v as FilterStatus)} className="mb-8">
+          <div className="overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0">
+            <TabsList className="w-full sm:w-auto inline-flex h-11">
             <TabsTrigger value="all" className="gap-2">
               All
               <span className="hidden sm:inline text-xs bg-secondary px-1.5 py-0.5 rounded-full">
@@ -151,7 +152,8 @@ const Dashboard = () => {
                 {taskCounts.done}
               </span>
             </TabsTrigger>
-          </TabsList>
+            </TabsList>
+          </div>
         </Tabs>
 
         {error && (
@@ -162,36 +164,43 @@ const Dashboard = () => {
         )}
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <div className="flex items-center justify-center py-24">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
           </div>
         ) : filteredTasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
+          <div className="flex flex-col items-center justify-center py-24 text-center bg-muted/30 rounded-lg border-2 border-dashed border-muted">
             {tasks.length === 0 ? (
               <>
-                <CheckSquare className="h-16 w-16 text-muted-foreground/50 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">No tasks yet</h3>
-                <p className="text-muted-foreground mb-4">
-                  Create your first task to get started
+                <div className="h-20 w-20 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+                  <CheckSquare className="h-10 w-10 text-primary" />
+                </div>
+                <h3 className="text-2xl font-semibold mb-2 text-foreground">No tasks yet</h3>
+                <p className="text-muted-foreground mb-8 max-w-sm mx-auto text-lg">
+                  Create your first task to get started and simplify your workflow.
                 </p>
-                <Button onClick={() => setIsFormOpen(true)} className="gap-2">
-                  <Plus className="h-4 w-4" />
-                  Add Task
+                <Button onClick={() => setIsFormOpen(true)} size="lg" className="gap-2 text-base px-8">
+                  <Plus className="h-5 w-5" />
+                  Add New Task
                 </Button>
               </>
             ) : (
               <>
-                <ListTodo className="h-16 w-16 text-muted-foreground/50 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">No tasks found</h3>
-                <p className="text-muted-foreground">
-                  No tasks match the selected filter
+                <div className="h-20 w-20 bg-muted rounded-full flex items-center justify-center mb-6">
+                  <ListTodo className="h-10 w-10 text-muted-foreground" />
+                </div>
+                <h3 className="text-2xl font-semibold mb-2 text-foreground">No tasks found</h3>
+                <p className="text-muted-foreground mb-6 text-lg">
+                  No tasks match the selected filter criteria.
                 </p>
+                <Button variant="outline" onClick={() => setFilter('all')} className="mt-2 text-base font-medium">
+                  Clear Filters
+                </Button>
               </>
             )}
           </div>
         ) : (
           <>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredTasks.map((task) => (
                 <TaskCard
                   key={task.id}
