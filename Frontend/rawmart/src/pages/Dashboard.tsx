@@ -45,7 +45,13 @@ const Dashboard = () => {
 
   const handleCreateTask = async (data: CreateTaskData) => {
     const newTask = await api.createTask(data);
-    setTasks((prev) => [newTask, ...prev]);
+    setTasks((prev) => {
+      const updated = [newTask, ...prev];
+      if (updated.length > 10) {
+        updated.pop();
+      }
+      return updated;
+    });
     toast({
       title: 'Task created',
       description: 'Your new task has been created successfully.',
