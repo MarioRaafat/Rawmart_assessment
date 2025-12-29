@@ -7,10 +7,13 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libsqlite3-dev \
-    libonig-dev
+    libonig-dev \
+    libpq-dev \
+    libzip-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_sqlite mbstring
+# Install PHP extensions (SQLite, PostgreSQL, and other required extensions)
+RUN docker-php-ext-install pdo_sqlite pdo_pgsql mbstring zip pcntl
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -19,10 +22,19 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --no-interaction --optimize-autoloader
+RUN composer install --no-dev --no-interaction --optimize-autoloader
+
+# Create storage directories and set permissions
+RUN mkdir -p storage/framework/{cache,sessions,views} \
+    && mkdir -p storage/logs \
+    && mkdir -p bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+# Cache Laravel configuration
+RUN php artisan config:clear && php artisan cache:clear
 
 # Expose port
 EXPOSE 8000
 
-# Start server
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Start server with migrations
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
