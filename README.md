@@ -123,7 +123,7 @@ The project includes Docker support for a consistent development environment.
 | **Filtered Views** | ✅ Done | Filter tasks by status (Pending, In Progress, Done) with server-side queries. |
 | **Docker Setup** | ✅ Done | `Dockerfile`s and `docker-compose.yml` added. |
 | **Basic Tests** | ✅ Done | Feature tests for Task CRUD operations added in `tests/Feature/TaskApiTest.php`. |
-| **Deployment** | ❌ Todo | Deployment link not yet available. |
+| **Deployment** | ✅ Done | https://rawmart-assessment.vercel.app |
 
 ---
 
