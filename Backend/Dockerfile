@@ -30,11 +30,11 @@ RUN mkdir -p storage/framework/{cache,sessions,views} \
     && mkdir -p bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Cache Laravel configuration
-RUN php artisan config:clear && php artisan cache:clear
-
 # Expose port
 EXPOSE 8000
 
-# Start server with migrations
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
+# Start server - clear cache and run migrations at runtime (not build time)
+CMD php artisan config:clear && \
+    php artisan cache:clear || true && \
+    php artisan migrate --force && \
+    php artisan serve --host=0.0.0.0 --port=8000
