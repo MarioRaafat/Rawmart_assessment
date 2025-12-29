@@ -66,7 +66,7 @@ const Register = () => {
       <div className="w-full max-w-lg animate-fade-in space-y-8">
         <div className="flex items-center justify-center gap-2 mb-8">
           <CheckSquare className="h-10 w-10 text-primary" />
-          <span className="text-3xl font-bold">TaskFlow</span>
+          <span className="text-3xl font-bold">Rawmart</span>
         </div>
 
         <Card className="border-muted shadow-lg">

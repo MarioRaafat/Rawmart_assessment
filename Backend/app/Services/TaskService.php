@@ -17,9 +17,15 @@ class TaskService
         ]);
     }
 
-    public function findAll(User $user)
+    public function findAll(User $user, int $limit = 10, ?string $status = null)
     {
-        return $user->tasks()->orderBy('created_at', 'desc')->paginate(10);
+        $query = $user->tasks()->orderBy('created_at', 'desc');
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->paginate($limit);
     }
 
     public function findOne(User $user, int $taskId): ?Task

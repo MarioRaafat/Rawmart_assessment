@@ -24,11 +24,11 @@ const Dashboard = () => {
 
   const { toast } = useToast();
 
-  const fetchTasks = useCallback(async (page: number = 1) => {
+  const fetchTasks = useCallback(async (page: number = 1, status: FilterStatus = filter) => {
     setIsLoading(true);
     setError('');
     try {
-      const response = await api.getTasks(page);
+      const response = await api.getTasks(page, 10, status === 'all' ? undefined : status);
       setTasks(response.data);
       setCurrentPage(response.current_page);
       setTotalPages(response.last_page);
@@ -37,11 +37,11 @@ const Dashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [filter]);
 
   useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
+    fetchTasks(1, filter);
+  }, [fetchTasks, filter]);
 
   const handleCreateTask = async (data: CreateTaskData) => {
     const newTask = await api.createTask(data);
@@ -95,17 +95,7 @@ const Dashboard = () => {
     setEditingTask(null);
   };
 
-  const filteredTasks = tasks.filter((task) => {
-    if (filter === 'all') return true;
-    return task.status === filter;
-  });
-
-  const taskCounts = {
-    all: tasks.length,
-    pending: tasks.filter((t) => t.status === 'pending').length,
-    in_progress: tasks.filter((t) => t.status === 'in_progress').length,
-    done: tasks.filter((t) => t.status === 'done').length,
-  };
+  const filteredTasks = tasks;
 
   return (
     <div className="min-h-screen bg-background">
@@ -128,30 +118,10 @@ const Dashboard = () => {
         <Tabs value={filter} onValueChange={(v) => setFilter(v as FilterStatus)} className="mb-8">
           <div className="overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0">
             <TabsList className="w-full sm:w-auto inline-flex h-11">
-            <TabsTrigger value="all" className="gap-2">
-              All
-              <span className="hidden sm:inline text-xs bg-secondary px-1.5 py-0.5 rounded-full">
-                {taskCounts.all}
-              </span>
-            </TabsTrigger>
-            <TabsTrigger value="pending" className="gap-2">
-              Pending
-              <span className="hidden sm:inline text-xs bg-warning/15 text-warning px-1.5 py-0.5 rounded-full">
-                {taskCounts.pending}
-              </span>
-            </TabsTrigger>
-            <TabsTrigger value="in_progress" className="gap-2">
-              In Progress
-              <span className="hidden sm:inline text-xs bg-info/15 text-info px-1.5 py-0.5 rounded-full">
-                {taskCounts.in_progress}
-              </span>
-            </TabsTrigger>
-            <TabsTrigger value="done" className="gap-2">
-              Done
-              <span className="hidden sm:inline text-xs bg-success/15 text-success px-1.5 py-0.5 rounded-full">
-                {taskCounts.done}
-              </span>
-            </TabsTrigger>
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="pending">Pending</TabsTrigger>
+            <TabsTrigger value="in_progress">In Progress</TabsTrigger>
+            <TabsTrigger value="done">Done</TabsTrigger>
             </TabsList>
           </div>
         </Tabs>
@@ -217,7 +187,7 @@ const Dashboard = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => fetchTasks(currentPage - 1)}
+                  onClick={() => fetchTasks(currentPage - 1, filter)}
                   disabled={currentPage === 1}
                 >
                   Previous
@@ -228,7 +198,7 @@ const Dashboard = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => fetchTasks(currentPage + 1)}
+                  onClick={() => fetchTasks(currentPage + 1, filter)}
                   disabled={currentPage === totalPages}
                 >
                   Next

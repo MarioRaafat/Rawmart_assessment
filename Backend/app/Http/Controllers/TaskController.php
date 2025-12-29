@@ -17,7 +17,16 @@ class TaskController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $tasks = $this->taskService->findAll($request->user());
+        $limit = $request->query('limit', 10);
+        $status = $request->query('status');
+
+        if ($status && !in_array($status, ['pending', 'in_progress', 'done'])) {
+            return response()->json([
+                'message' => 'Invalid status parameter',
+            ], 400);
+        }
+
+        $tasks = $this->taskService->findAll($request->user(), $limit, $status);
 
         return response()->json([
             'tasks' => $tasks,

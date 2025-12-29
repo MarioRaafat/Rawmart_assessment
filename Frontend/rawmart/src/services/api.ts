@@ -86,8 +86,12 @@ class ApiService {
   }
 
   // Task endpoints
-  async getTasks(page: number = 1): Promise<PaginatedResponse<Task>> {
-    const response = await this.request<{ tasks: PaginatedResponse<Task> }>(`/tasks?page=${page}`);
+  async getTasks(page: number = 1, limit: number = 10, status?: string): Promise<PaginatedResponse<Task>> {
+    let url = `/tasks?page=${page}&limit=${limit}`;
+    if (status && status !== 'all') {
+      url += `&status=${status}`;
+    }
+    const response = await this.request<{ tasks: PaginatedResponse<Task> }>(url);
     return response.tasks;
   }
 

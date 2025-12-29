@@ -22,7 +22,7 @@ export const Header: React.FC = () => {
       <div className="w-full max-w-[1920px] mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2">
           <CheckSquare className="h-6 w-6 text-primary" />
-          <span className="text-xl font-semibold">TaskFlow</span>
+          <span className="text-xl font-semibold">Rawmart</span>
         </div>
         
         {user && (
