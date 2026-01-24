@@ -44,14 +44,8 @@ const Dashboard = () => {
   }, [fetchTasks, filter]);
 
   const handleCreateTask = async (data: CreateTaskData) => {
-    const newTask = await api.createTask(data);
-    setTasks((prev) => {
-      const updated = [newTask, ...prev];
-      if (updated.length > 10) {
-        updated.pop();
-      }
-      return updated;
-    });
+    await api.createTask(data);
+    await fetchTasks(1, filter);
     toast({
       title: 'Task created',
       description: 'Your new task has been created successfully.',
@@ -84,7 +78,11 @@ const Dashboard = () => {
 
   const handleDeleteTask = async (id: number) => {
     await api.deleteTask(id);
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+    if(tasks.length == 1 && currentPage > 1) {
+      await fetchTasks(currentPage - 1, filter);
+    } else {
+      setTasks((prev) => prev.filter((task) => task.id !== id));
+    }
     toast({
       title: 'Task deleted',
       description: 'The task has been deleted successfully.',
